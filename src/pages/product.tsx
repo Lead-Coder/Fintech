@@ -5,7 +5,7 @@ const products = [
       href: '#',
       imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-01-related-product-01.jpg',
       imageAlt: "Front of men's Basic Tee in black.",
-      price: '$35',
+      price: '$45',
       color: 'Black',
     },
     // More products...

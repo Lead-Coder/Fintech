@@ -18,30 +18,37 @@ const products = [
     const [email, setEmail] = useState("");
 
     useEffect(() => {
-      axios.get("/api/user").then((response) => {
-        setEmail(response.data.email);
-        setLoyalty(response.data.loyaltyPoints);
-      });
-    }, []);
+      axios.get("/api/user", {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      })
+      .then((response) => {
+          console.log("User data received:", response.data); // Debugging
+          setEmail(response.data.email); // Ensure email is set
+          setLoyalty(response.data.loyaltyPoints);
+      })
+      .catch((err) => console.error("Error fetching user data:", err));
+  }, []);  
 
     const updateLoyalty = () => {
       const newPoints = loyalty + 10;
       setLoyalty(newPoints);
-      const token = localStorage.getItem("token"); 
-
-      axios
-      .post(
-        "http://localhost:3000/api/update-loyalty",
-        { email, loyaltyPoints: newPoints },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,  
-          },
-        }
+      const token = localStorage.getItem("token");
+      console.log(token);
+      console.log("Sending request with:", { email, loyaltyPoints: newPoints }); // Debugging
+  
+      axios.post(
+          "http://localhost:3000/api/update-loyalty",
+          { email, loyaltyPoints: newPoints },  // Make sure email is included
+          {
+              headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+              },
+          }
       )
       .then(() => console.log("Loyalty points updated"))
       .catch((err) => console.error("Error updating loyalty points:", err));
-    };
+  };
 
     return (
       <div className="bg-white">

@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const router = express.Router();
 const Loyalty = require("../models/loyalty.js")
 const User = require("../models/user.js");
+const jwt = require("jsonwebtoken");
 
 // Middleware to extract user from token
 const authenticateUser = (req, res, next) => {
@@ -26,8 +27,13 @@ const authenticateUser = (req, res, next) => {
   });
   
   router.post("/api/update-loyalty", authenticateUser, async (req, res) => {
+    console.log("Received request body:", req.body);
     const { email, loyaltyPoints } = req.body;
-    await Loyalty.updateOne({ email }, { loyaltyPoints });  
+    const result = await Loyalty.updateOne(
+      { email },  // Find user by email
+      { $set: { loyaltyPoints } },  // Update only loyaltyPoints
+      { upsert: true } // Create new document if not found
+    ); 
     res.json({ message: "Loyalty points updated successfully" });
   });
 

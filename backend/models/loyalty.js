@@ -14,5 +14,5 @@ const UserSchema = mongoose.Schema(
     { timestamps: true }
 );
 
-const Loyalty = mongoose.model('loyalty', UserSchema);
+const Loyalty = mongoose.model('loyalties', UserSchema);
 module.exports = Loyalty;
